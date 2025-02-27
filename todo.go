@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/aashaybelekar/go-do/cmd"
+)
 
 func main() {
 	app_logo := `
@@ -15,5 +19,6 @@ func main() {
                                                                       
 `
 	fmt.Println(app_logo)
+	cmd.Execute()
 
 }
