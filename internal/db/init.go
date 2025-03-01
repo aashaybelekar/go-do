@@ -53,5 +53,5 @@ func init() {
 			panic(err)
 		}
 	}
-
+	defer writer.Flush()
 }
