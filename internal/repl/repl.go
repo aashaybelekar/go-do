@@ -4,9 +4,9 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/aashaybelekar/go-do/cmd"
+	"github.com/mattn/go-shellwords"
 )
 
 func Repl() {
@@ -24,7 +24,12 @@ func Repl() {
 			continue
 		}
 
-		args := strings.Fields(input) // Split input into words
+		args, err := shellwords.Parse(input)
+		if err != nil {
+			fmt.Println("Error parsing input:", err)
+			continue
+		}
+
 		if len(args) == 0 {
 			continue
 		}

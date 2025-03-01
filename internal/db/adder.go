@@ -7,14 +7,19 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/aashaybelekar/go-do/internal/db"
 	"github.com/aashaybelekar/go-do/internal/util"
 )
 
-func Addtask(p string, t string) error {
-	filePath := db.LoadConfig()
+func Addtask(t string) error {
+	config, err := util.LoadConfig()
+	if err != nil {
+		log.Print(err)
+		return err
+	}
 
-	file, err := os.OpenFile(filePath, os.O_APPEND, 0644)
+	filePath := config.Location
+
+	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_WRONLY, 0644)
 
 	if err != nil {
 		log.Print(err)
@@ -41,8 +46,4 @@ func Addtask(p string, t string) error {
 	}
 	defer writer.Flush()
 	return nil
-}
-
-func main() {
-	Addtask("", "Buy a Bikes")
 }

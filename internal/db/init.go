@@ -6,34 +6,18 @@ import (
 	"os"
 	"strings"
 
-	"gopkg.in/yaml.v2"
+	"github.com/aashaybelekar/go-do/internal/util"
 )
 
-type DataBaseConfig struct {
-	location string
-}
-
-func LoadConfig() (*DataBaseConfig, error) {
-	filename := "./config/db.yaml"
-	file, err := os.ReadFile(filename)
-	if err != nil {
-		return nil, err
-	}
-
-	var config DataBaseConfig
-	err = yaml.Unmarshal(file, &config)
-	return &config, err
-}
-
 func init() {
-	config, err := LoadConfig()
+	config, err := util.LoadConfig()
 	if err != nil {
 		log.Print("Error loading config:", err)
 		return
 	}
 	log.Print("Loaded config sucessfully.")
 
-	filePath := config.location
+	filePath := config.Location
 
 	if !strings.HasSuffix(filePath, ".csv") {
 		panic("file path has to end with '.csv'")
