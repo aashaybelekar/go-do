@@ -85,7 +85,7 @@ func Listtask(a_tag bool) error {
 
 	for _, row := range records[1:] {
 		out_string, complete := format_row(row, a_tag)
-		if complete {
+		if !complete {
 			fmt.Fprintln(w, out_string)
 		}
 	}
