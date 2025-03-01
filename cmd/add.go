@@ -24,7 +24,6 @@ This will add a new task with the description "Buy groceries" to your to-do list
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, arg := range args {
-			log.Print(arg)
 			err := db.Addtask(arg)
 			if err != nil {
 				log.Print(err)
