@@ -4,8 +4,9 @@ Copyright © 2025 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
+	"log"
 
+	"github.com/aashaybelekar/go-do/internal/db"
 	"github.com/spf13/cobra"
 )
 
@@ -22,7 +23,13 @@ go-do add "Buy groceries"
 This will add a new task with the description "Buy groceries" to your to-do list.`,
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("add called %v", args)
+		for _, arg := range args {
+			log.Print(arg)
+			err := db.Addtask(arg)
+			if err != nil {
+				log.Print(err)
+			}
+		}
 	},
 }
 
