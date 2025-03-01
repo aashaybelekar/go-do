@@ -2,46 +2,54 @@ package db
 
 import (
 	"encoding/csv"
+	"fmt"
 	"log"
 	"os"
-	"strings"
+	"text/tabwriter"
+
+	"github.com/aashaybelekar/go-do/internal/util"
 )
 
-func Listtask(p string) error {
-	if p == "" {
-		p = "./artifacts/data.csv"
-	}
-
-	filePath := p
-	tempPath := strings.Split(filePath, "/")
-	folderPath := strings.Join(tempPath[:len(tempPath)-1], "/")
-
-	if err := os.MkdirAll(folderPath, os.ModePerm); err != nil {
-		log.Print("Error creating folder:", err)
+func Listtask(a_tag bool) error {
+	config, err := util.LoadConfig()
+	if err != nil {
+		log.Print(err)
 		return err
 	}
 
-	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
+	filePath := config.Location
+
+	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_RDONLY, 0644)
 	if err != nil {
 		log.Print(err)
 		return err
 	}
 	defer file.Close()
 
-	fileInfo, err := file.Stat()
+	reader := csv.NewReader(file)
+	records, err := reader.ReadAll()
+
 	if err != nil {
 		log.Print(err)
-		return err
 	}
-	isEmpty := fileInfo.Size() == 0
 
-	writer := csv.NewWriter(file)
-	if isEmpty {
-		header := []string{"ID", "Task", "Created", "Complete"}
-		if err := writer.Write(header); err != nil {
-			log.Print(err)
-			return err
+	w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.Debug)
+
+	for _, row := range records {
+		task_id := row[0]
+		task_des := row[1]
+		task_time := row[2]
+		task_completion := row[3]
+		if a_tag {
+			out_string := fmt.Sprintf("\t%s\t%s\t%s\t%s\t", task_id, task_des, task_time, task_completion)
+			fmt.Fprintln(w, out_string)
+		} else {
+			out_string := fmt.Sprintf("\t%s\t%s\t%s\t", task_id, task_des, task_time)
+			fmt.Fprintln(w, out_string)
 		}
 	}
+
+	w.Flush()
+
 	return nil
 }

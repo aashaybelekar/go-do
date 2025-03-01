@@ -1,14 +1,17 @@
 package cmd
 
 import (
-	"fmt"
+	"log"
 
+	"github.com/aashaybelekar/go-do/internal/db"
 	"github.com/spf13/cobra"
 )
 
+var a_tag bool
+
 // listCmd represents the list command
 var listCmd = &cobra.Command{
-	Use:   "list",
+	Use:   "list [OPTIONS]",
 	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
@@ -17,11 +20,15 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("list called")
+		err := db.Listtask(a_tag)
+		if err != nil {
+			log.Print(err)
+		}
 	},
 }
 
 func init() {
+	rootCmd.PersistentFlags().BoolVarP(&a_tag, "all", "a", false, "Output everything")
 	rootCmd.AddCommand(listCmd)
 
 	// Here you will define your flags and configuration settings.
