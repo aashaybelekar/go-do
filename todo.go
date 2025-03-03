@@ -16,7 +16,7 @@ func main() {
                                    ██║██╗██║  ██║██╗██║██╗██║  ██║██╗
                                    ╚═╝╚═╝╚═╝  ╚═╝╚═╝╚═╝╚═╝╚═╝  ╚═╝╚═╝                              
                                       (Yet Another To-Do App)   
-'exit'/'quit' to quit.                                                                 
+'exit'/'quit'/'q' to quit.                                                                 
 `
 	fmt.Println(app_logo)
 	repl.Repl()
